@@ -23,10 +23,10 @@ def generate_sample(die_type_counts: Tuple[int],
 
     Args:
         die_type_counts (Tuple[int]): The number of each type of die present
-        in the bag. 
+            in the bag. 
         die_type_face_probs (Tuple): Contains one Tuple for each die type 
-        specifying the probability with which that die type rolls each face.
-        Example with 2 3-sided dice- [[0.5, 0.2, 0.3]], [0, .5, .5]
+            specifying the probability with which that die type rolls each face.
+            Example with 2 3-sided dice- [[0.5, 0.2, 0.3]], [0, .5, .5]
         num_draws (int): The number of times to pull a die from the bag
         rolls_per_draw (int): The number of times a selected die is rolled.
 
@@ -41,7 +41,12 @@ def generate_sample(die_type_counts: Tuple[int],
     # Set die_types_draw to a numpy ndarray of indices of randomly selected 
     # dice by using np.random.choice with the optional probabilities p = ... 
     np.random.seed(seed)
-    die_types_drawn = None # YOUR CODE HERE
+    die_types_drawn = np.random.choice(
+        len(die_type_counts_array),
+        size = num_draws,
+        replace = True, 
+        p = die_type_probs
+    ).astype(int)
     # Define roll with the argument structure below, where draw_type is the
     # zero-based index of the type of die to be rolled. Use np.random.choice
     # to produce rolls_per_draw random rolls according to the die_type_face_probs
@@ -49,7 +54,14 @@ def generate_sample(die_type_counts: Tuple[int],
     # as an index into die_type_face_probs and feed the result into
     # np.random.choice using the optional p = ... argument.
     def roll(draw_type: int) -> NDArray[np.integer]:
-        None # YOUR CODE HERE
+        face_prob = die_type_face_probs[draw_type]
+        faces = np.random.choice(
+            len(face_prob),
+            size = rolls_per_draw,
+            replace = True,
+            p = face_prob
+        )
+        return faces
     # In python, map returns a map object which can be coerced into a tuple or
     # list, which we then coerce again into an np.array. The final result is an
     # array of num_draws arrays each containing rolls_per_draw rolls.
